@@ -30,20 +30,18 @@ export default function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: true,
+        headerShown: false, // ✅ EN ÖNEMLİSİ BU (beyaz header gider)
         headerShadowVisible: false,
-        headerStyle: { backgroundColor: "#f3f8f3" },
 
         tabBarActiveTintColor: "#2e7d32",
         tabBarInactiveTintColor: "#8a8a8a",
-
         tabBarStyle: {
           height: 64,
           paddingTop: 8,
           paddingBottom: 10,
           borderTopWidth: 1,
           borderTopColor: "#e7eee7",
-          backgroundColor: "#fff",
+          backgroundColor: "#F3E9D8", // ✅ beyaz yerine beige
         },
 
         tabBarLabelStyle: { fontSize: 11, fontWeight: "700" },
@@ -52,21 +50,12 @@ export default function TabNavigator() {
       <Tab.Screen
         name="Home"
         component={Home}
-        options={({ navigation }) => ({
-          headerTitle: () => <AppLogo />,
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Profile")}
-              style={{ paddingHorizontal: 14 }}
-            >
-              <Ionicons name="person-circle" size={28} color="#2e7d32" />
-            </TouchableOpacity>
-          ),
+        options={{
           title: "Ana Sayfa",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" size={size} color={color} />
           ),
-        })}
+        }}
       />
 
       <Tab.Screen

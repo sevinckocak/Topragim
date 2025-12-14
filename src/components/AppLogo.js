@@ -1,12 +1,25 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function AppLogo() {
+export default function AppLogo({ size = 28 }) {
   return (
     <View style={styles.container}>
-      <View style={styles.iconWrap}>
-        <Ionicons name="leaf" size={18} color="#fff" />
+      <View
+        style={[
+          styles.iconWrap,
+          {
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+          },
+        ]}
+      >
+        <Ionicons
+          name="leaf"
+          size={size * 0.65} // ikon orantılı
+          color="#E7F0E3"
+        />
       </View>
     </View>
   );
@@ -14,14 +27,10 @@ export default function AppLogo() {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    justifyContent: "center",
   },
   iconWrap: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
     backgroundColor: "#2e7d32",
     alignItems: "center",
     justifyContent: "center",

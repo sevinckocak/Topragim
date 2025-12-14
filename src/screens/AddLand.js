@@ -14,6 +14,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase/FirebaseConfig";
+import ScreenBackground from "../components/ScreenBackground";
 
 const TOTAL_STEPS = 3;
 
@@ -178,331 +179,333 @@ export default function AddLand({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: "#f4f7f4" }}
+      style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <View style={styles.page}>
-        {/* HEADER */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={onBack} style={styles.backBtn}>
-            <Ionicons name="chevron-back" size={22} color="#1b5e20" />
-          </TouchableOpacity>
+      <ScreenBackground>
+        <View style={styles.page}>
+          {/* HEADER */}
+          <View style={styles.header}>
+            <TouchableOpacity onPress={onBack} style={styles.backBtn}>
+              <Ionicons name="chevron-back" size={22} color="#1b5e20" />
+            </TouchableOpacity>
 
-          <View style={{ flex: 1 }}>
-            <Text style={styles.headerTitle}>İlan Ekle</Text>
-            <Text style={styles.headerStep}>{stepTitle}</Text>
-            <StepProgress current={step} total={TOTAL_STEPS} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.headerTitle}>İlan Ekle</Text>
+              <Text style={styles.headerStep}>{stepTitle}</Text>
+              <StepProgress current={step} total={TOTAL_STEPS} />
+            </View>
           </View>
-        </View>
 
-        {/* CONTENT */}
-        <ScrollView
-          contentContainerStyle={{ paddingBottom: 120 }}
-          showsVerticalScrollIndicator={false}
-        >
-          {step === 1 && (
-            <>
-              <Text style={styles.bigTitle}>Temel Bilgiler</Text>
+          {/* CONTENT */}
+          <ScrollView
+            contentContainerStyle={{ paddingBottom: 140 }}
+            showsVerticalScrollIndicator={false}
+          >
+            {step === 1 && (
+              <>
+                <Text style={styles.bigTitle}>Temel Bilgiler</Text>
 
-              <Card>
-                <Label>Başlık</Label>
-                <TextInput
-                  style={styles.input}
-                  value={title}
-                  onChangeText={setTitle}
-                  placeholder='Örn: "Muğla - 20 Dönüm Zeytinlik"'
-                  placeholderTextColor="#9aa59a"
-                />
-
-                <View style={{ height: 10 }} />
-
-                <View style={styles.row}>
-                  <View style={{ flex: 1 }}>
-                    <Label>Alan (dönüm)</Label>
-                    <TextInput
-                      style={styles.input}
-                      value={area}
-                      onChangeText={setArea}
-                      keyboardType="numeric"
-                      placeholder="20"
-                      placeholderTextColor="#9aa59a"
-                    />
-                  </View>
-                  <View style={{ width: 10 }} />
-                  <View style={{ flex: 1 }}>
-                    <Label>Arazi Sahibi</Label>
-                    <TextInput
-                      style={styles.input}
-                      value={ownerName}
-                      onChangeText={setOwnerName}
-                      placeholder='Örn: "Mehmet Y."'
-                      placeholderTextColor="#9aa59a"
-                    />
-                  </View>
-                </View>
-
-                <View style={{ height: 10 }} />
-
-                <Label>Açıklama</Label>
-                <TextInput
-                  style={[styles.input, { height: 90 }]}
-                  value={description}
-                  onChangeText={setDescription}
-                  placeholder="Kısa açıklama..."
-                  placeholderTextColor="#9aa59a"
-                  multiline
-                />
-              </Card>
-
-              <Text style={styles.bigTitle}>Konum</Text>
-
-              <Card>
-                <View style={styles.row}>
-                  <View style={{ flex: 1 }}>
-                    <Label>Şehir</Label>
-                    <TextInput
-                      style={styles.input}
-                      value={city}
-                      onChangeText={setCity}
-                      placeholder="Muğla"
-                      placeholderTextColor="#9aa59a"
-                    />
-                  </View>
-                  <View style={{ width: 10 }} />
-                  <View style={{ flex: 1 }}>
-                    <Label>İlçe</Label>
-                    <TextInput
-                      style={styles.input}
-                      value={district}
-                      onChangeText={setDistrict}
-                      placeholder="Menteşe"
-                      placeholderTextColor="#9aa59a"
-                    />
-                  </View>
-                </View>
-
-                <View style={{ height: 10 }} />
-
-                <Label>Köy/Mahalle (opsiyonel)</Label>
-                <TextInput
-                  style={styles.input}
-                  value={village}
-                  onChangeText={setVillage}
-                  placeholder="Yeniköy"
-                  placeholderTextColor="#9aa59a"
-                />
-              </Card>
-            </>
-          )}
-
-          {step === 2 && (
-            <>
-              <Text style={styles.bigTitle}>Arazi Detaylarını Gir</Text>
-
-              <Card>
-                <Text style={styles.sectionTitle}>Altyapı Durumu</Text>
-
-                <View style={styles.cardsRow}>
-                  <SelectCard
-                    title="Suyu Var"
-                    icon="water"
-                    active={hasWater}
-                    onPress={() => setHasWater((v) => !v)}
-                  />
-                  <SelectCard
-                    title="Makine Girer"
-                    icon="car-sport"
-                    active={machineryAccess}
-                    onPress={() => setMachineryAccess((v) => !v)}
-                  />
-                  <SelectCard
-                    title="Düşük Kimyasal"
-                    icon="flask"
-                    active={lowChemicals}
-                    onPress={() => setLowChemicals((v) => !v)}
-                  />
-                </View>
-
-                <View style={{ height: 10 }} />
-
-                <View style={styles.cardsRow}>
-                  <SelectCard
-                    title="Organik"
-                    icon="leaf"
-                    active={organicOnly}
-                    onPress={() => setOrganicOnly((v) => !v)}
-                  />
-                  <View style={{ flex: 1 }} />
-                  <View style={{ flex: 1 }} />
-                </View>
-              </Card>
-
-              <Card>
-                <Text style={styles.sectionTitle}>Toprak Tipi</Text>
-                <Chips
-                  options={SOIL_OPTIONS}
-                  value={soilType}
-                  onChange={setSoilType}
-                />
-              </Card>
-
-              {hasWater && (
                 <Card>
-                  <Text style={styles.sectionTitle}>Sulama Tipi</Text>
-                  <Chips
-                    options={IRRIGATION_OPTIONS}
-                    value={irrigationType}
-                    onChange={setIrrigationType}
+                  <Label>Başlık</Label>
+                  <TextInput
+                    style={styles.input}
+                    value={title}
+                    onChangeText={setTitle}
+                    placeholder='Örn: "Muğla - 20 Dönüm Zeytinlik"'
+                    placeholderTextColor="#7A7A7A"
+                  />
+
+                  <View style={{ height: 10 }} />
+
+                  <View style={styles.row}>
+                    <View style={{ flex: 1 }}>
+                      <Label>Alan (dönüm)</Label>
+                      <TextInput
+                        style={styles.input}
+                        value={area}
+                        onChangeText={setArea}
+                        keyboardType="numeric"
+                        placeholder="20"
+                        placeholderTextColor="#7A7A7A"
+                      />
+                    </View>
+                    <View style={{ width: 10 }} />
+                    <View style={{ flex: 1 }}>
+                      <Label>Arazi Sahibi</Label>
+                      <TextInput
+                        style={styles.input}
+                        value={ownerName}
+                        onChangeText={setOwnerName}
+                        placeholder='Örn: "Mehmet Y."'
+                        placeholderTextColor="#7A7A7A"
+                      />
+                    </View>
+                  </View>
+
+                  <View style={{ height: 10 }} />
+
+                  <Label>Açıklama</Label>
+                  <TextInput
+                    style={[styles.input, { height: 90 }]}
+                    value={description}
+                    onChangeText={setDescription}
+                    placeholder="Kısa açıklama..."
+                    placeholderTextColor="#7A7A7A"
+                    multiline
                   />
                 </Card>
-              )}
 
-              <Card>
-                <Text style={styles.sectionTitle}>Diğer Özellikler</Text>
+                <Text style={styles.bigTitle}>Konum</Text>
 
-                <SwitchRow
-                  label="Su tasarrufu şartı"
-                  value={waterSavingRequired}
-                  onChange={setWaterSavingRequired}
-                />
-                <Divider />
-                <SwitchRow
-                  label="Toprak analizi zorunlu"
-                  value={soilAnalysisRequired}
-                  onChange={setSoilAnalysisRequired}
-                />
-              </Card>
-            </>
-          )}
+                <Card>
+                  <View style={styles.row}>
+                    <View style={{ flex: 1 }}>
+                      <Label>Şehir</Label>
+                      <TextInput
+                        style={styles.input}
+                        value={city}
+                        onChangeText={setCity}
+                        placeholder="Muğla"
+                        placeholderTextColor="#7A7A7A"
+                      />
+                    </View>
+                    <View style={{ width: 10 }} />
+                    <View style={{ flex: 1 }}>
+                      <Label>İlçe</Label>
+                      <TextInput
+                        style={styles.input}
+                        value={district}
+                        onChangeText={setDistrict}
+                        placeholder="Menteşe"
+                        placeholderTextColor="#7A7A7A"
+                      />
+                    </View>
+                  </View>
 
-          {step === 3 && (
-            <>
-              <Text style={styles.bigTitle}>Fotoğraf & Fiyat</Text>
+                  <View style={{ height: 10 }} />
 
-              <Card>
-                <Text style={styles.sectionTitle}>Ürünler</Text>
-                <Label>Uygun ürünler (virgülle)</Label>
-                <TextInput
-                  style={styles.input}
-                  value={allowedCropsText}
-                  onChangeText={setAllowedCropsText}
-                  placeholder="Zeytin, Sebze"
-                  placeholderTextColor="#9aa59a"
-                />
-              </Card>
+                  <Label>Köy/Mahalle (opsiyonel)</Label>
+                  <TextInput
+                    style={styles.input}
+                    value={village}
+                    onChangeText={setVillage}
+                    placeholder="Yeniköy"
+                    placeholderTextColor="#7A7A7A"
+                  />
+                </Card>
+              </>
+            )}
 
-              <Card>
-                <Text style={styles.sectionTitle}>Fotoğraflar</Text>
-                <Label>Foto URL'leri (virgülle)</Label>
-                <TextInput
-                  style={[styles.input, { height: 80 }]}
-                  value={photosText}
-                  onChangeText={setPhotosText}
-                  placeholder="https://...jpg, https://...png"
-                  placeholderTextColor="#9aa59a"
-                  multiline
-                />
-                <Text style={styles.hint}>
-                  Şimdilik URL ile. Sonra galeri + Firebase Storage yapacağız.
-                </Text>
-              </Card>
+            {step === 2 && (
+              <>
+                <Text style={styles.bigTitle}>Arazi Detaylarını Gir</Text>
 
-              <Card>
-                <Text style={styles.sectionTitle}>Fiyat</Text>
+                <Card>
+                  <Text style={styles.sectionTitle}>Altyapı Durumu</Text>
 
-                <View style={styles.pillsRow}>
-                  {PRICE_TYPES.map((p) => {
-                    const active = p.key === priceType;
-                    return (
-                      <TouchableOpacity
-                        key={p.key}
-                        style={[styles.pill, active && styles.pillActive]}
-                        onPress={() => setPriceType(p.key)}
-                        activeOpacity={0.9}
-                      >
-                        <Text
-                          style={[
-                            styles.pillText,
-                            active && styles.pillTextActive,
-                          ]}
-                        >
-                          {p.label}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
-
-                {priceType === "rent" ? (
-                  <>
-                    <Label>Kira bedeli (₺)</Label>
-                    <TextInput
-                      style={styles.input}
-                      value={price}
-                      onChangeText={setPrice}
-                      keyboardType="numeric"
-                      placeholder="15000"
-                      placeholderTextColor="#9aa59a"
+                  <View style={styles.cardsRow}>
+                    <SelectCard
+                      title="Suyu Var"
+                      icon="water"
+                      active={hasWater}
+                      onPress={() => setHasWater((v) => !v)}
                     />
-                  </>
-                ) : (
-                  <>
-                    <Label>Ürün payı oranı</Label>
-                    <TextInput
-                      style={styles.input}
-                      value={shareRate}
-                      onChangeText={setShareRate}
-                      placeholder="%40"
-                      placeholderTextColor="#9aa59a"
+                    <SelectCard
+                      title="Makine Girer"
+                      icon="car-sport"
+                      active={machineryAccess}
+                      onPress={() => setMachineryAccess((v) => !v)}
                     />
-                  </>
+                    <SelectCard
+                      title="Düşük Kimyasal"
+                      icon="flask"
+                      active={lowChemicals}
+                      onPress={() => setLowChemicals((v) => !v)}
+                    />
+                  </View>
+
+                  <View style={{ height: 10 }} />
+
+                  <View style={styles.cardsRow}>
+                    <SelectCard
+                      title="Organik"
+                      icon="leaf"
+                      active={organicOnly}
+                      onPress={() => setOrganicOnly((v) => !v)}
+                    />
+                    <View style={{ flex: 1 }} />
+                    <View style={{ flex: 1 }} />
+                  </View>
+                </Card>
+
+                <Card>
+                  <Text style={styles.sectionTitle}>Toprak Tipi</Text>
+                  <Chips
+                    options={SOIL_OPTIONS}
+                    value={soilType}
+                    onChange={setSoilType}
+                  />
+                </Card>
+
+                {hasWater && (
+                  <Card>
+                    <Text style={styles.sectionTitle}>Sulama Tipi</Text>
+                    <Chips
+                      options={IRRIGATION_OPTIONS}
+                      value={irrigationType}
+                      onChange={setIrrigationType}
+                    />
+                  </Card>
                 )}
-              </Card>
-            </>
-          )}
-        </ScrollView>
 
-        {/* BOTTOM BAR */}
-        <View style={styles.bottomBar}>
-          <TouchableOpacity
-            style={[styles.bottomBtn, styles.backBottom]}
-            onPress={onBack}
-            activeOpacity={0.9}
-          >
-            <Ionicons name="chevron-back" size={18} color="#2e7d32" />
-            <Text style={styles.backBottomText}>
-              {step === 1 ? "Çık" : "Geri"}
-            </Text>
-          </TouchableOpacity>
+                <Card>
+                  <Text style={styles.sectionTitle}>Diğer Özellikler</Text>
 
-          {step < TOTAL_STEPS ? (
+                  <SwitchRow
+                    label="Su tasarrufu şartı"
+                    value={waterSavingRequired}
+                    onChange={setWaterSavingRequired}
+                  />
+                  <Divider />
+                  <SwitchRow
+                    label="Toprak analizi zorunlu"
+                    value={soilAnalysisRequired}
+                    onChange={setSoilAnalysisRequired}
+                  />
+                </Card>
+              </>
+            )}
+
+            {step === 3 && (
+              <>
+                <Text style={styles.bigTitle}>Fotoğraf & Fiyat</Text>
+
+                <Card>
+                  <Text style={styles.sectionTitle}>Ürünler</Text>
+                  <Label>Uygun ürünler (virgülle)</Label>
+                  <TextInput
+                    style={styles.input}
+                    value={allowedCropsText}
+                    onChangeText={setAllowedCropsText}
+                    placeholder="Zeytin, Sebze"
+                    placeholderTextColor="#7A7A7A"
+                  />
+                </Card>
+
+                <Card>
+                  <Text style={styles.sectionTitle}>Fotoğraflar</Text>
+                  <Label>Foto URL'leri (virgülle)</Label>
+                  <TextInput
+                    style={[styles.input, { height: 80 }]}
+                    value={photosText}
+                    onChangeText={setPhotosText}
+                    placeholder="https://...jpg, https://...png"
+                    placeholderTextColor="#7A7A7A"
+                    multiline
+                  />
+                  <Text style={styles.hint}>
+                    Şimdilik URL ile. Sonra galeri + Firebase Storage yapacağız.
+                  </Text>
+                </Card>
+
+                <Card>
+                  <Text style={styles.sectionTitle}>Fiyat</Text>
+
+                  <View style={styles.pillsRow}>
+                    {PRICE_TYPES.map((p) => {
+                      const active = p.key === priceType;
+                      return (
+                        <TouchableOpacity
+                          key={p.key}
+                          style={[styles.pill, active && styles.pillActive]}
+                          onPress={() => setPriceType(p.key)}
+                          activeOpacity={0.9}
+                        >
+                          <Text
+                            style={[
+                              styles.pillText,
+                              active && styles.pillTextActive,
+                            ]}
+                          >
+                            {p.label}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+
+                  {priceType === "rent" ? (
+                    <>
+                      <Label>Kira bedeli (₺)</Label>
+                      <TextInput
+                        style={styles.input}
+                        value={price}
+                        onChangeText={setPrice}
+                        keyboardType="numeric"
+                        placeholder="15000"
+                        placeholderTextColor="#7A7A7A"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Label>Ürün payı oranı</Label>
+                      <TextInput
+                        style={styles.input}
+                        value={shareRate}
+                        onChangeText={setShareRate}
+                        placeholder="%40"
+                        placeholderTextColor="#7A7A7A"
+                      />
+                    </>
+                  )}
+                </Card>
+              </>
+            )}
+          </ScrollView>
+
+          {/* BOTTOM BAR */}
+          <View style={styles.bottomBar}>
             <TouchableOpacity
-              style={[styles.bottomBtn, styles.nextBottom]}
-              onPress={onNext}
+              style={[styles.bottomBtn, styles.backBottom]}
+              onPress={onBack}
               activeOpacity={0.9}
             >
-              <Text style={styles.nextBottomText}>Devam Et</Text>
-              <Ionicons name="chevron-forward" size={18} color="#fff" />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={[
-                styles.bottomBtn,
-                styles.nextBottom,
-                submitting && { opacity: 0.7 },
-              ]}
-              onPress={onSave}
-              disabled={submitting}
-              activeOpacity={0.9}
-            >
-              <Text style={styles.nextBottomText}>
-                {submitting ? "Kaydediliyor..." : "Yayınla"}
+              <Ionicons name="chevron-back" size={18} color="#2e7d32" />
+              <Text style={styles.backBottomText}>
+                {step === 1 ? "Çık" : "Geri"}
               </Text>
-              <Ionicons name="checkmark" size={18} color="#fff" />
             </TouchableOpacity>
-          )}
+
+            {step < TOTAL_STEPS ? (
+              <TouchableOpacity
+                style={[styles.bottomBtn, styles.nextBottom]}
+                onPress={onNext}
+                activeOpacity={0.9}
+              >
+                <Text style={styles.nextBottomText}>Devam Et</Text>
+                <Ionicons name="chevron-forward" size={18} color="#fff" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={[
+                  styles.bottomBtn,
+                  styles.nextBottom,
+                  submitting && { opacity: 0.7 },
+                ]}
+                onPress={onSave}
+                disabled={submitting}
+                activeOpacity={0.9}
+              >
+                <Text style={styles.nextBottomText}>
+                  {submitting ? "Kaydediliyor..." : "Yayınla"}
+                </Text>
+                <Ionicons name="checkmark" size={18} color="#fff" />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
-      </View>
+      </ScreenBackground>
     </KeyboardAvoidingView>
   );
 }
@@ -617,7 +620,8 @@ function StepProgress({ current, total }) {
 /* ----------------- Styles ----------------- */
 
 const styles = StyleSheet.create({
-  page: { flex: 1, backgroundColor: "#f4f7f4" },
+  // layout background ScreenBackground'tan geliyor
+  page: { flex: 1 },
 
   header: {
     flexDirection: "row",
@@ -625,15 +629,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 10,
     paddingBottom: 12,
-    backgroundColor: "#f4f7f4",
+    // şeffaf bırakıyoruz ki üst yeşil vurgu gözüksün
+    backgroundColor: "transparent",
   },
   backBtn: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF7EA",
     borderWidth: 1,
-    borderColor: "#e7eee7",
+    borderColor: "#E8DDC9",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -642,8 +647,8 @@ const styles = StyleSheet.create({
   headerStep: {
     marginTop: 2,
     fontSize: 12,
-    color: "#667066",
-    fontWeight: "700",
+    color: "#6B6B6B",
+    fontWeight: "800",
   },
 
   stepRow: { flexDirection: "row", alignItems: "center", marginTop: 10 },
@@ -653,8 +658,8 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: 11,
     borderWidth: 2,
-    borderColor: "#cfd9cf",
-    backgroundColor: "#fff",
+    borderColor: "#CDBFA7",
+    backgroundColor: "#FFF7EA",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -664,7 +669,7 @@ const styles = StyleSheet.create({
   stepLine: {
     width: 26,
     height: 3,
-    backgroundColor: "#dfe9df",
+    backgroundColor: "#E8DDC9",
     marginHorizontal: 6,
     borderRadius: 2,
   },
@@ -682,11 +687,11 @@ const styles = StyleSheet.create({
   card: {
     marginHorizontal: 16,
     marginBottom: 12,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF7EA",
     borderRadius: 16,
     padding: 14,
     borderWidth: 1,
-    borderColor: "#e7eee7",
+    borderColor: "#E8DDC9",
   },
 
   sectionTitle: {
@@ -698,10 +703,10 @@ const styles = StyleSheet.create({
   label: { fontSize: 12, fontWeight: "800", color: "#2a2a2a", marginBottom: 6 },
 
   input: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFDF7",
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#e7eee7",
+    borderColor: "#E8DDC9",
     paddingHorizontal: 12,
     paddingVertical: 10,
     color: "#222",
@@ -715,20 +720,20 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: "#e7eee7",
+    borderColor: "#E8DDC9",
     paddingVertical: 12,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF7EA",
     position: "relative",
   },
-  selectCardActive: { backgroundColor: "#eaf5eb", borderColor: "#cfe7d1" },
+  selectCardActive: { backgroundColor: "#E7F0E3", borderColor: "#CFE7D1" },
 
   selectIconWrap: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: "#eaf5eb",
+    backgroundColor: "#E7F0E3",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 6,
@@ -760,8 +765,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: "#dfe9df",
-    backgroundColor: "#fff",
+    borderColor: "#E8DDC9",
+    backgroundColor: "#FFFDF7",
   },
   chipActive: { backgroundColor: "#2e7d32", borderColor: "#2e7d32" },
   chipText: { fontSize: 12, fontWeight: "900", color: "#2e7d32" },
@@ -780,7 +785,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingRight: 10,
   },
-  divider: { height: 1, backgroundColor: "#eef4ee" },
+  divider: { height: 1, backgroundColor: "rgba(0,0,0,0.06)" },
 
   hint: { marginTop: 8, fontSize: 11, color: "#6b776b" },
 
@@ -791,10 +796,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#e7eee7",
-    backgroundColor: "#fff",
+    borderColor: "#E8DDC9",
+    backgroundColor: "#FFFDF7",
   },
-  pillActive: { backgroundColor: "#eaf5eb", borderColor: "#cfe7d1" },
+  pillActive: { backgroundColor: "#E7F0E3", borderColor: "#CFE7D1" },
   pillText: { fontSize: 12, fontWeight: "900", color: "#2a2a2a" },
   pillTextActive: { color: "#1b5e20" },
 
@@ -805,9 +810,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     padding: 12,
     paddingBottom: 14,
-    backgroundColor: "#f4f7f4",
+    backgroundColor: "#F3E9D8",
     borderTopWidth: 1,
-    borderTopColor: "#e7eee7",
+    borderTopColor: "#E8DDC9",
     flexDirection: "row",
     gap: 10,
   },
@@ -821,9 +826,9 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   backBottom: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF7EA",
     borderWidth: 1,
-    borderColor: "#e7eee7",
+    borderColor: "#E8DDC9",
   },
   backBottomText: { color: "#2e7d32", fontWeight: "900" },
 

@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import ScreenBackground from "../components/ScreenBackground";
 
 export default function Profile({ navigation }) {
   const [darkMode, setDarkMode] = useState(false);
@@ -17,147 +18,150 @@ export default function Profile({ navigation }) {
   };
 
   return (
-    <ScrollView
-      style={[styles.container, darkMode && styles.containerDark]}
-      contentContainerStyle={{ paddingBottom: 30 }}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* HEADER */}
-      <View style={[styles.headerCard, darkMode && styles.cardDark]}>
-        <View style={styles.avatar}>
-          <Ionicons name="person" size={26} color="#fff" />
+    <ScreenBackground>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* HEADER CARD */}
+        <View style={[styles.headerCard, darkMode && styles.cardDark]}>
+          <View style={styles.avatar}>
+            <Ionicons name="person" size={26} color="#fff" />
+          </View>
+
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.name, darkMode && styles.textWhite]}>
+              Kullanıcı Adı
+            </Text>
+            <Text style={[styles.email, darkMode && styles.textLight]}>
+              user@email.com
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            style={styles.editBtn}
+            onPress={() => console.log("Profil düzenle")}
+          >
+            <Ionicons name="create-outline" size={20} color="#2e7d32" />
+          </TouchableOpacity>
         </View>
 
-        <View style={{ flex: 1 }}>
-          <Text style={[styles.name, darkMode && styles.textWhite]}>
-            Kullanıcı Adı
-          </Text>
-          <Text style={[styles.email, darkMode && styles.textLight]}>
-            user@email.com
-          </Text>
+        {/* QUICK ACTIONS */}
+        <Text style={[styles.sectionTitle, darkMode && styles.textWhite]}>
+          Kısayollar
+        </Text>
+
+        <View style={styles.gridRow}>
+          <QuickCard
+            title="Favorilerim"
+            icon="heart"
+            darkMode={darkMode}
+            onPress={() => console.log("Favoriler ekranı")}
+          />
+          <QuickCard
+            title="İlanlarım"
+            icon="document-text"
+            darkMode={darkMode}
+            onPress={() => console.log("İlanlarım ekranı")}
+          />
         </View>
 
-        <TouchableOpacity
-          style={styles.editBtn}
-          onPress={() => console.log("Profil düzenle")}
-        >
-          <Ionicons name="create-outline" size={20} color="#2e7d32" />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.gridRow}>
+          <QuickCard
+            title="Canlı Destek"
+            icon="chatbubbles"
+            darkMode={darkMode}
+            onPress={() => console.log("Canlı destek ekranı")}
+          />
+          <QuickCard
+            title="Mesajlar"
+            icon="mail"
+            darkMode={darkMode}
+            onPress={() => navigation.navigate("Messages")}
+          />
+        </View>
 
-      {/* QUICK ACTIONS */}
-      <Text style={[styles.sectionTitle, darkMode && styles.textWhite]}>
-        Kısayollar
-      </Text>
+        {/* SETTINGS */}
+        <Text style={[styles.sectionTitle, darkMode && styles.textWhite]}>
+          Ayarlar
+        </Text>
 
-      <View style={styles.gridRow}>
-        <QuickCard
-          title="Favorilerim"
-          icon="heart"
-          darkMode={darkMode}
-          onPress={() => console.log("Favoriler ekranı")}
-        />
-        <QuickCard
-          title="İlanlarım"
-          icon="document-text"
-          darkMode={darkMode}
-          onPress={() => console.log("İlanlarım ekranı")}
-        />
-      </View>
+        <View style={[styles.listCard, darkMode && styles.cardDark]}>
+          <RowItem
+            icon="moon"
+            title="Dark Mode"
+            darkMode={darkMode}
+            right={
+              <Switch
+                value={darkMode}
+                onValueChange={setDarkMode}
+                trackColor={{ false: "#ccc", true: "#2e7d32" }}
+                thumbColor="#fff"
+              />
+            }
+            onPress={() => setDarkMode((p) => !p)}
+          />
 
-      <View style={styles.gridRow}>
-        <QuickCard
-          title="Canlı Destek"
-          icon="chatbubbles"
-          darkMode={darkMode}
-          onPress={() => console.log("Canlı destek ekranı")}
-        />
-        <QuickCard
-          title="Mesajlar"
-          icon="mail"
-          darkMode={darkMode}
-          onPress={() => console.log("Mesajlar tabına git")}
-        />
-      </View>
+          <Divider darkMode={darkMode} />
 
-      {/* SETTINGS */}
-      <Text style={[styles.sectionTitle, darkMode && styles.textWhite]}>
-        Ayarlar
-      </Text>
+          <RowItem
+            icon="key"
+            title="Şifre Değiştir"
+            darkMode={darkMode}
+            onPress={() => console.log("Şifre değiştirme ekranı")}
+          />
 
-      <View style={[styles.listCard, darkMode && styles.cardDark]}>
-        <RowItem
-          icon="moon"
-          title="Dark Mode"
-          darkMode={darkMode}
-          right={
-            <Switch
-              value={darkMode}
-              onValueChange={setDarkMode}
-              trackColor={{ false: "#ccc", true: "#2e7d32" }}
-              thumbColor="#fff"
-            />
-          }
-          onPress={() => setDarkMode((p) => !p)}
-        />
+          <Divider darkMode={darkMode} />
 
-        <Divider darkMode={darkMode} />
+          <RowItem
+            icon="notifications"
+            title="Bildirim Ayarları"
+            darkMode={darkMode}
+            onPress={() => console.log("Bildirim ayarları")}
+          />
+        </View>
 
-        <RowItem
-          icon="key"
-          title="Şifre Değiştir"
-          darkMode={darkMode}
-          onPress={() => console.log("Şifre değiştirme ekranı")}
-        />
+        {/* SUPPORT */}
+        <Text style={[styles.sectionTitle, darkMode && styles.textWhite]}>
+          Destek
+        </Text>
 
-        <Divider darkMode={darkMode} />
+        <View style={[styles.listCard, darkMode && styles.cardDark]}>
+          <RowItem
+            icon="help-circle"
+            title="Yardım / SSS"
+            darkMode={darkMode}
+            onPress={() => console.log("SSS ekranı")}
+          />
 
-        <RowItem
-          icon="notifications"
-          title="Bildirim Ayarları"
-          darkMode={darkMode}
-          onPress={() => console.log("Bildirim ayarları")}
-        />
-      </View>
+          <Divider darkMode={darkMode} />
 
-      {/* SUPPORT */}
-      <Text style={[styles.sectionTitle, darkMode && styles.textWhite]}>
-        Destek
-      </Text>
+          <RowItem
+            icon="headset"
+            title="Canlı Destek"
+            darkMode={darkMode}
+            onPress={() => console.log("Canlı destek ekranı")}
+          />
+        </View>
 
-      <View style={[styles.listCard, darkMode && styles.cardDark]}>
-        <RowItem
-          icon="help-circle"
-          title="Yardım / SSS"
-          darkMode={darkMode}
-          onPress={() => console.log("SSS ekranı")}
-        />
+        {/* ACCOUNT */}
+        <Text style={[styles.sectionTitle, darkMode && styles.textWhite]}>
+          Hesap
+        </Text>
 
-        <Divider darkMode={darkMode} />
+        <View style={[styles.listCard, darkMode && styles.cardDark]}>
+          <RowItem
+            icon="log-out"
+            title="Çıkış Yap"
+            danger
+            darkMode={darkMode}
+            onPress={handleLogout}
+          />
+        </View>
 
-        <RowItem
-          icon="headset"
-          title="Canlı Destek"
-          darkMode={darkMode}
-          onPress={() => console.log("Canlı destek ekranı")}
-        />
-      </View>
-
-      {/* ACCOUNT */}
-      <Text style={[styles.sectionTitle, darkMode && styles.textWhite]}>
-        Hesap
-      </Text>
-
-      <View style={[styles.listCard, darkMode && styles.cardDark]}>
-        <RowItem
-          icon="log-out"
-          title="Çıkış Yap"
-          danger
-          darkMode={darkMode}
-          onPress={handleLogout}
-        />
-      </View>
-    </ScrollView>
+        <View style={{ height: 24 }} />
+      </ScrollView>
+    </ScreenBackground>
   );
 }
 
@@ -223,22 +227,20 @@ function Divider({ darkMode }) {
 /* ---------- Styles ---------- */
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f3f8f3",
+  content: {
     padding: 16,
-  },
-  containerDark: {
-    backgroundColor: "#0f1712",
+    paddingBottom: 32,
   },
 
   headerCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF7EA",
     borderRadius: 16,
     padding: 14,
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 18,
+    borderWidth: 1,
+    borderColor: "#E8DDC9",
   },
   cardDark: {
     backgroundColor: "#141f18",
@@ -256,17 +258,18 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: "700",
+    color: "#2B2B2B",
   },
   email: {
     marginTop: 2,
     fontSize: 12,
-    color: "#666",
+    color: "#6B6B6B",
   },
   editBtn: {
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: "#eaf5eb",
+    backgroundColor: "#E7F0E3",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -276,6 +279,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginTop: 8,
     marginBottom: 10,
+    color: "#2B2B2B",
   },
 
   gridRow: {
@@ -285,20 +289,25 @@ const styles = StyleSheet.create({
   },
   quickCard: {
     width: "48%",
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF7EA",
     borderRadius: 16,
     padding: 16,
     gap: 10,
+    borderWidth: 1,
+    borderColor: "#E8DDC9",
   },
   quickText: {
     fontSize: 14,
     fontWeight: "600",
+    color: "#2B2B2B",
   },
 
   listCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF7EA",
     borderRadius: 16,
     paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: "#E8DDC9",
   },
   row: {
     paddingHorizontal: 14,

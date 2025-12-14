@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import ScreenBackground from "../components/ScreenBackground";
 
 const Explore = () => {
   return (
-    <View>
-      <Text>Explore</Text>
-    </View>
+    <ScreenBackground>
+      <View>
+        <Text>Explore</Text>
+      </View>
+    </ScreenBackground>
   );
 };
 
